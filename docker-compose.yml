@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  notebook:
+    image: walkerlab/pytorch-jupyter:cuda-11.3.1-pytorch-1.12.0-torchvision-0.12.0-torchaudio-0.11.0-ubuntu-20.04
+    environment:
+      - DJ_HOST=mysql
+      - DJ_USER=root
+      - DJ_PASS=password
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/src
+    networks:
+      - db-network
+
+  mysql:
+    image: mysql:8.0.30
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - db-network
+
+networks:
+  db-network:
